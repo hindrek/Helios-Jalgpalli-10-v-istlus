@@ -1,1 +1,1 @@
-# Helios-Jalgpalli-10-v-istlus
+# Helios Jalgpalli 10-võistlus
