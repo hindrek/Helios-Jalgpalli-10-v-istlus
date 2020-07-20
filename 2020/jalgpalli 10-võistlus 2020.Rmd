@@ -3,7 +3,7 @@ title: "Jalgpalli 10-võistlus 2020"
 author: Hindrek Teder
 date: 2020-07-18
 output:
-  html_document: 
+  github_document:
     df_print: kable
 ---
 
