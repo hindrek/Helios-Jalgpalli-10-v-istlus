@@ -5,4 +5,4 @@ Heliose Jalgpalli 10-võistluse tulemused:
 * 2019 - Helios U17 ja U15 grupid
 * 2020 - Helios U17 grupp
 
-Tulemused (\*.xlsx) ja kokkuvõte (\*.html) on salvesatatud vastavasse alamkausta.
+Tulemused (\*.md) on salvesatatud vastavasse alamkausta.
