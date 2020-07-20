@@ -1,0 +1,9 @@
+library(readxl)
+
+df <- read_excel("tulemused 2017.xlsx")
+df$tribling <- df$tribling * -1
+df$`palliga jooksmine` <- df$`palliga jooksmine` * -1
+
+scores <- scale(df[-1])
+df2 <- cbind(df[1], scores, kokku = rowSums(scores, na.rm = T))
+df2 <- df2[order(df2$kokku, decreasing = T), ]

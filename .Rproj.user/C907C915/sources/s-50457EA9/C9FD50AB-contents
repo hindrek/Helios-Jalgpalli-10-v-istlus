@@ -1,0 +1,65 @@
+---
+title: "Jalgpalli 10-võistlus 2019"
+author: Hindrek Teder
+date: 2019-07-19
+output: 
+  html_document: 
+    toc: yes
+    df_print: kable
+---
+
+## Sissejuhatus
+Helios U17 ja U15 gruppide jalgpalli 10-võistlus toimus Piiri treeninglaagris. Kokku osales 25 mängijat.
+
+## Teegid
+```{r message=FALSE, warning=FALSE}
+library(readxl)
+library(janitor)
+library(skimr)
+library(tidyverse)
+library(scales)
+```
+
+
+## Andmed
+```{r}
+tulemused <- read_excel("jalgpalli 10-võistlus 2019.xlsx",
+                        .name_repair = make_clean_names)
+skim(tulemused)
+```
+
+## Punktiarvestus
+Iga ala eest oli võimalik teenida 1 kuni 10 punkti vastavalt tulemusele. Ala tegemata jätmise korral punkte ei antud. Seega oli 10 ala pealt võimalik kokku teenida maksimaalselt 100 punkti (10 alavõitu).
+```{r}
+punktid <- tulemused %>% 
+  pivot_longer(-nimi, names_to = "ala", values_to = "tulemus") %>% 
+  mutate(punktid = if_else(ala %in% c("tribling", "palliga_jooksmine"), -tulemus, tulemus)) %>% 
+  group_by(ala) %>% 
+  mutate(punktid = rescale(punktid, c(1, 10))) %>% 
+  ungroup()
+```
+
+## Alavõitjad
+```{r}
+punktid %>% 
+  group_by(ala) %>% 
+  filter(punktid == max(punktid, na.rm = T)) %>% 
+  select(ala, tulemus, nimi) %>% 
+  arrange(ala)
+```
+
+## Kokkuvõte
+```{r}
+kokku <- punktid %>% 
+  group_by(nimi) %>% 
+  summarise(kokku = sum(punktid, na.rm = T)) %>% 
+  arrange(desc(kokku))
+kokku
+```
+
+```{r}
+kokku %>% 
+  ggplot(aes(x = kokku, y = reorder(nimi, kokku))) +
+  geom_col() +
+  labs(y = "nimi")
+```

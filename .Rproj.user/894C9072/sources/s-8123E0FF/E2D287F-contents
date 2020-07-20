@@ -1,0 +1,14 @@
+library(readxl)
+library(tidyverse)
+
+
+df <- read_excel("jalgpalli10võistlus2019.xlsx", na = "NA")
+
+scaled <- df %>%
+  mutate(
+    tribling = -tribling,
+    `palli vedamine` = -`palli vedamine`
+  ) %>%
+  replace_na(lapply(., min, na.rm = T)) %>%
+  column_to_rownames("nimi") %>%
+  scale()
