@@ -13,7 +13,6 @@ Helios U17 grupi jalgpalli 10-võistlus toimus Piiri treeninglaagris. Kokku osal
 ## Teegid
 ```{r message=FALSE, warning=FALSE}
 library(readxl)
-library(janitor)
 library(skimr)
 library(tidyverse)
 library(scales)
@@ -22,8 +21,7 @@ library(scales)
 
 ## Andmed
 ```{r}
-tulemused <- read_excel("jalgpalli 10-võistlus 2020.xlsx",
-                        .name_repair = make_clean_names)
+tulemused <- read_excel("jalgpalli 10-võistlus 2020.xlsx")
 skim(tulemused)
 ```
 
@@ -32,7 +30,7 @@ Iga ala eest oli võimalik teenida 1 kuni 10 punkti vastavalt tulemusele. Ala te
 ```{r}
 punktid <- tulemused %>% 
   pivot_longer(-nimi, names_to = "ala", values_to = "tulemus") %>% 
-  mutate(punktid = if_else(ala %in% c("tribling", "palliga_jooksmine"), -tulemus, tulemus)) %>% 
+  mutate(punktid = if_else(ala %in% c("tribling", "palliga jooksmine"), -tulemus, tulemus)) %>% 
   group_by(ala) %>% 
   mutate(punktid = rescale(punktid, c(1, 10))) %>% 
   ungroup()
@@ -43,7 +41,7 @@ punktid <- tulemused %>%
 punktid %>% 
   group_by(ala) %>% 
   filter(punktid == max(punktid, na.rm = T)) %>% 
-  select(ala, tulemus, nimi) %>% 
+  select(ala, nimi, tulemus) %>% 
   arrange(ala)
 ```
 
@@ -51,14 +49,15 @@ punktid %>%
 ```{r}
 kokku <- punktid %>% 
   group_by(nimi) %>% 
-  summarise(kokku = sum(punktid, na.rm = T)) %>% 
-  arrange(desc(kokku))
+  summarise(punktid = sum(punktid, na.rm = T)) %>% 
+  arrange(desc(punktid)) %>% 
+  rowid_to_column(var = "koht")
 kokku
 ```
 
 ```{r}
 kokku %>% 
-  ggplot(aes(x = kokku, y = reorder(nimi, kokku))) +
+  ggplot(aes(x = punktid, y = reorder(nimi, punktid))) +
   geom_col() +
   labs(y = "nimi")
 ```

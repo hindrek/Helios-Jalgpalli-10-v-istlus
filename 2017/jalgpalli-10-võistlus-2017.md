@@ -12,7 +12,6 @@ Kokku osales 19 mängijat.
 
 ``` r
 library(readxl)
-library(janitor)
 library(skimr)
 library(tidyverse)
 library(scales)
@@ -21,8 +20,7 @@ library(scales)
 ## Andmed
 
 ``` r
-tulemused <- read_excel("jalgpalli 10-võistlus 2017.xlsx",
-                        .name_repair = make_clean_names)
+tulemused <- read_excel("jalgpalli 10-võistlus 2017.xlsx")
 skim(tulemused)
 ```
 
@@ -48,18 +46,18 @@ Data summary
 
 **Variable type: numeric**
 
-| skim\_variable     | n\_missing | complete\_rate |  mean |    sd |    p0 |   p25 |   p50 |   p75 |  p100 | hist  |
-| :----------------- | ---------: | -------------: | ----: | ----: | ----: | ----: | ----: | ----: | ----: | :---- |
-| jalaga\_koksimine  |          0 |           1.00 | 16.89 | 20.58 |  2.00 |  6.50 | 11.00 | 15.00 | 92.00 | ▇▂▁▁▁ |
-| kaugusloomine      |          0 |           1.00 |  9.74 |  5.29 |  1.00 |  5.50 | 10.00 | 14.00 | 18.00 | ▇▆▇▇▇ |
-| tribling           |          2 |           0.89 | 21.20 |  3.60 | 17.90 | 19.28 | 19.67 | 20.90 | 28.30 | ▇▃▁▁▂ |
-| peaga\_koksimine   |          0 |           1.00 |  4.89 |  3.11 |  2.00 |  3.00 |  4.00 |  5.00 | 16.00 | ▇▅▁▁▁ |
-| audivise           |          0 |           1.00 | 10.00 |  5.63 |  1.00 |  5.50 | 10.00 | 14.50 | 19.00 | ▇▇▆▇▇ |
-| korgusloomine      |          2 |           0.89 |  3.29 |  0.29 |  2.90 |  3.03 |  3.34 |  3.52 |  3.86 | ▇▅▆▃▅ |
-| latti\_loomine     |          1 |           0.95 |  0.78 |  0.81 |  0.00 |  0.00 |  1.00 |  1.00 |  2.00 | ▇▁▆▁▃ |
-| palliga\_jooksmine |          0 |           1.00 | 12.53 |  1.19 | 10.75 | 11.95 | 12.31 | 12.90 | 15.22 | ▅▇▇▁▂ |
-| penalt             |          0 |           1.00 |  1.11 |  0.81 |  0.00 |  1.00 |  1.00 |  1.50 |  3.00 | ▃▇▁▃▁ |
-| tapsusloomine      |          0 |           1.00 |  1.42 |  0.90 |  0.00 |  1.00 |  1.00 |  2.00 |  3.00 | ▃▇▁▇▂ |
+| skim\_variable    | n\_missing | complete\_rate |  mean |    sd |    p0 |   p25 |   p50 |   p75 |  p100 | hist  |
+| :---------------- | ---------: | -------------: | ----: | ----: | ----: | ----: | ----: | ----: | ----: | :---- |
+| jalaga kõksimine  |          0 |           1.00 | 16.89 | 20.58 |  2.00 |  6.50 | 11.00 | 15.00 | 92.00 | ▇▂▁▁▁ |
+| kauguslöömine     |          0 |           1.00 |  9.74 |  5.29 |  1.00 |  5.50 | 10.00 | 14.00 | 18.00 | ▇▆▇▇▇ |
+| tribling          |          2 |           0.89 | 21.20 |  3.60 | 17.90 | 19.28 | 19.67 | 20.90 | 28.30 | ▇▃▁▁▂ |
+| peaga kõksimine   |          0 |           1.00 |  4.89 |  3.11 |  2.00 |  3.00 |  4.00 |  5.00 | 16.00 | ▇▅▁▁▁ |
+| audivise          |          0 |           1.00 | 10.00 |  5.63 |  1.00 |  5.50 | 10.00 | 14.50 | 19.00 | ▇▇▆▇▇ |
+| kõrguslöömine     |          2 |           0.89 |  3.29 |  0.29 |  2.90 |  3.03 |  3.34 |  3.52 |  3.86 | ▇▅▆▃▅ |
+| latti löömine     |          1 |           0.95 |  0.78 |  0.81 |  0.00 |  0.00 |  1.00 |  1.00 |  2.00 | ▇▁▆▁▃ |
+| palliga jooksmine |          0 |           1.00 | 12.53 |  1.19 | 10.75 | 11.95 | 12.31 | 12.90 | 15.22 | ▅▇▇▁▂ |
+| penalt            |          0 |           1.00 |  1.11 |  0.81 |  0.00 |  1.00 |  1.00 |  1.50 |  3.00 | ▃▇▁▃▁ |
+| täpsuslöömine     |          0 |           1.00 |  1.42 |  0.90 |  0.00 |  1.00 |  1.00 |  2.00 |  3.00 | ▃▇▁▇▂ |
 
 ## Punktiarvestus
 
@@ -82,28 +80,28 @@ punktid <- tulemused %>%
 punktid %>% 
   group_by(ala) %>% 
   filter(punktid == max(punktid, na.rm = T)) %>% 
-  select(ala, tulemus, nimi) %>% 
+  select(ala, nimi, tulemus) %>% 
   arrange(ala)
 ```
 
 <div class="kable-table">
 
-| ala                | tulemus | nimi              |
-| :----------------- | ------: | :---------------- |
-| audivise           |   19.00 | Raido Villiko     |
-| jalaga\_koksimine  |   92.00 | Mihkel Sepp       |
-| kaugusloomine      |   18.00 | Ramon Põldaru     |
-| korgusloomine      |    3.86 | Ramon Põldaru     |
-| latti\_loomine     |    2.00 | Kaarel Kaasik     |
-| latti\_loomine     |    2.00 | Siim Oskar Liivla |
-| latti\_loomine     |    2.00 | Gabriel Soome     |
-| latti\_loomine     |    2.00 | Jan-Erik Kärner   |
-| palliga\_jooksmine |   10.75 | Hans Herzmann     |
-| peaga\_koksimine   |   16.00 | Ramon Põldaru     |
-| penalt             |    3.00 | Ramon Põldaru     |
-| tapsusloomine      |    3.00 | Randes Kanter     |
-| tapsusloomine      |    3.00 | Jasper Kanter     |
-| tribling           |   17.90 | Ramon Põldaru     |
+| ala               | nimi              | tulemus |
+| :---------------- | :---------------- | ------: |
+| audivise          | Raido Villiko     |   19.00 |
+| jalaga kõksimine  | Mihkel Sepp       |   92.00 |
+| kauguslöömine     | Ramon Põldaru     |   18.00 |
+| kõrguslöömine     | Ramon Põldaru     |    3.86 |
+| latti löömine     | Kaarel Kaasik     |    2.00 |
+| latti löömine     | Siim Oskar Liivla |    2.00 |
+| latti löömine     | Gabriel Soome     |    2.00 |
+| latti löömine     | Jan-Erik Kärner   |    2.00 |
+| palliga jooksmine | Marcello Širikov  |   15.22 |
+| peaga kõksimine   | Ramon Põldaru     |   16.00 |
+| penalt            | Ramon Põldaru     |    3.00 |
+| tribling          | Ramon Põldaru     |   17.90 |
+| täpsuslöömine     | Randes Kanter     |    3.00 |
+| täpsuslöömine     | Jasper Kanter     |    3.00 |
 
 </div>
 
@@ -112,8 +110,9 @@ punktid %>%
 ``` r
 kokku <- punktid %>% 
   group_by(nimi) %>% 
-  summarise(kokku = sum(punktid, na.rm = T)) %>% 
-  arrange(desc(kokku))
+  summarise(punktid = sum(punktid, na.rm = T)) %>% 
+  arrange(desc(punktid)) %>% 
+  rowid_to_column(var = "koht")
 ```
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
@@ -124,33 +123,33 @@ kokku
 
 <div class="kable-table">
 
-| nimi              |    kokku |
-| :---------------- | -------: |
-| Ramon Põldaru     | 77.22617 |
-| Mihkel Sepp       | 73.28312 |
-| Gabriel Soome     | 64.77454 |
-| Raido Villiko     | 59.68095 |
-| Matis Rein        | 55.73407 |
-| Rasmus Lodi       | 53.70576 |
-| Siim Oskar Liivla | 52.56387 |
-| Marcus Mosin      | 52.14349 |
-| Hans Herzmann     | 51.13419 |
-| Jasper Kanter     | 49.53458 |
-| Kaarel Kaasik     | 45.28677 |
-| Randes Kanter     | 40.23017 |
-| Karl Trahv        | 39.81180 |
-| Jan-Erik Kärner   | 38.02591 |
-| Kristjan Rüüson   | 36.96399 |
-| Roland Kruus      | 32.90344 |
-| Marcus Tambets    | 31.61507 |
-| Robin Melk        | 24.60885 |
-| Marcello Širikov  | 19.28654 |
+| koht | nimi              |  punktid |
+| ---: | :---------------- | -------: |
+|    1 | Ramon Põldaru     | 72.37383 |
+|    2 | Mihkel Sepp       | 64.64553 |
+|    3 | Raido Villiko     | 60.74807 |
+|    4 | Gabriel Soome     | 57.02286 |
+|    5 | Matis Rein        | 52.73407 |
+|    6 | Siim Oskar Liivla | 51.69809 |
+|    7 | Marcus Mosin      | 51.35825 |
+|    8 | Rasmus Lodi       | 48.00777 |
+|    9 | Karl Trahv        | 46.31515 |
+|   10 | Jasper Kanter     | 46.13190 |
+|   11 | Kaarel Kaasik     | 42.56865 |
+|   12 | Hans Herzmann     | 42.13419 |
+|   13 | Jan-Erik Kärner   | 38.16685 |
+|   14 | Roland Kruus      | 37.55444 |
+|   15 | Randes Kanter     | 36.74695 |
+|   16 | Kristjan Rüüson   | 33.48077 |
+|   17 | Marcus Tambets    | 30.54796 |
+|   18 | Marcello Širikov  | 28.28654 |
+|   19 | Robin Melk        | 23.13905 |
 
 </div>
 
 ``` r
 kokku %>% 
-  ggplot(aes(x = kokku, y = reorder(nimi, kokku))) +
+  ggplot(aes(x = punktid, y = reorder(nimi, punktid))) +
   geom_col() +
   labs(y = "nimi")
 ```
